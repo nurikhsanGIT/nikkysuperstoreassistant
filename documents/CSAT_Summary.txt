@@ -1,0 +1,25 @@
+
+# RINGKASAN DATA KOMPLAIN PELANGGAN (NIKKY SUPERSTORE - CUSTOMER SUPPORT)
+
+Berdasarkan dataset `Customer_support_data.csv`:
+- **Total Keluhan Pelanggan:** 85907
+- **Rata-rata Skor Kepuasan (CSAT):** 4.24 dari 5.0
+
+## Kategori Masalah Terbanyak:
+- Returns: 44097 keluhan
+- Order Related: 23215 keluhan
+- Refund Related: 4550 keluhan
+- Product Queries: 3692 keluhan
+- Shopzilla Related: 2792 keluhan
+
+## Sub-kategori Masalah Terbanyak:
+- Reverse Pickup Enquiry: 22389 keluhan
+- Return request: 8523 keluhan
+- Delayed: 7388 keluhan
+- Order status enquiry: 6922 keluhan
+- Installation/demo: 4116 keluhan
+
+## Analisis dan Rekomendasi (Dihasilkan oleh Analyst Agent):
+Sebagian besar masalah pelanggan terpusat pada kategori-kategori utama di atas. 
+Agen Customer Service perlu memprioritaskan penanganan keluhan terkait pesanan (Order Related) dan masalah pengiriman/pengembalian uang (Refund).
+Nilai CSAT saat ini bisa ditingkatkan dengan memberikan respon yang lebih cepat.

@@ -1,0 +1,19 @@
+=== STANDAR OPERASIONAL PROSEDUR (SOP) NIKKY SUPERSTORE ===
+
+1. DIVISI CUSTOMER SERVICE (CS):
+- Wajib melayani pelanggan dengan ramah dan merespons pertanyaan maksimal 5 menit setelah diterima.
+- Semua keluhan mengenai produk (Furniture, Office Supplies, Technology) harus dicatat dengan jelas dalam sistem tiket.
+- CSAT (Customer Satisfaction Score) harus selalu dipertahankan di atas 4.0. CS harus menanyakan tingkat kepuasan di akhir pelayanan.
+
+2. DIVISI PENJUALAN & RETAIL (SALES):
+- Kasir di cabang wajib memindai barang dengan hati-hati, terutama barang bernilai tinggi (Technology).
+- Menawarkan perlindungan garansi tambahan kepada pelanggan jika membeli perangkat elektronik atau furnitur rakitan.
+
+3. DIVISI LOGISTIK & GUDANG (INVENTORY):
+- Setiap barang yang masuk (restock) wajib dicek kondisi fisiknya. Furnitur yang lecet atau barang elektronik cacat pabrik dilarang masuk gudang persediaan.
+- Sistem inventaris wajib sinkron dengan data POS (XAMPP). Pembaruan stok dilakukan secara real-time setiap terjadi transaksi.
+- Barang dikelompokkan dengan rapi berdasarkan kategori (Furniture, Technology, Office Supplies) di gudang.
+
+4. DIVISI PENGIRIMAN:
+- Pengiriman furnitur harus dilakukan dengan menggunakan proteksi ekstra agar tidak rusak di jalan.
+- Sopir wajib memastikan pelanggan menandatangani berita acara serah terima barang.

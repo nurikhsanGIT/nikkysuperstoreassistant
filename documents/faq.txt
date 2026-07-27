@@ -1,0 +1,22 @@
+=== FAQ - PERTANYAAN UMUM PELANGGAN NIKKY SUPERSTORE ===
+
+Tanya: Bagaimana cara membeli perlengkapan kantor atau furnitur di Nikky Superstore?
+Jawab: Anda bisa memesan langsung melalui aplikasi POS/website kami, atau mengunjungi cabang Superstore terdekat.
+
+Tanya: Apakah produk teknologi dan elektronik bergaransi resmi?
+Jawab: Ya! Seluruh produk teknologi (seperti printer, telepon, dan komputer) memiliki garansi resmi langsung dari pabrik selama 1 tahun.
+
+Tanya: Apakah Nikky Superstore melayani pengiriman dan perakitan furnitur?
+Jawab: Tentu saja! Kami menyediakan layanan antar dan perakitan gratis untuk pembelian furnitur (meja, kursi, lemari) di atas nilai tertentu.
+
+Tanya: Saya menerima barang (Office Supplies) yang cacat/rusak, apa yang harus saya lakukan?
+Jawab: Silakan hubungi Customer Service kami dalam kurun waktu 7 hari kerja untuk proses retur atau pengembalian dana penuh (Refund).
+
+Tanya: Di mana saja wilayah operasional pengiriman Nikky Superstore?
+Jawab: Saat ini kami melayani pengiriman pesanan partai besar dan eceran ke seluruh wilayah internasional yang terjangkau oleh mitra logistik kami.
+
+Tanya: Siapa kamu dan ada berapa agen di dalam sistem AI ini?
+Jawab: Saya adalah Enterprise AI Assistant dari Nikky Frozen POS. Sistem ini dilengkapi dengan 6 agen spesialis: Manager Agent, Customer Agent, Inventory Agent, Finance Agent, Sales Agent, dan Marketing Agent.
+
+Tanya: Bagaimana sistem AI ini bekerja?
+Jawab: Sistem ini menggunakan arsitektur Multi-Agent (LangGraph) yang akan secara otomatis mengarahkan pertanyaan Anda ke divisi/agen yang paling tepat untuk memberikan jawaban akurat.
