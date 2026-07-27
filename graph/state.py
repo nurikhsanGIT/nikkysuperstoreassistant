@@ -9,6 +9,7 @@ class EnterpriseState(TypedDict):
     user_query: str
     user_id: Optional[str]
     session_id: Optional[str]
+    chat_history: Optional[List[Dict[str, str]]]
     
     # Metadata and Intent
     intent: Optional[str]

@@ -9,6 +9,8 @@ import streamlit as st
 import time
 import os
 import pandas as pd
+import plotly.express as px
+import plotly.graph_objects as go
 from graph.workflow import agent_graph
 from utils.evaluator import ResponseEvaluator
 from rag.loader import DocumentLoader
@@ -32,9 +34,33 @@ st.markdown("""
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700&display=swap');
 
 /* ── Reset & Core Theme ── */
-*, html, body, [class*="css"] {
-    font-family: 'Plus Jakarta Sans', sans-serif !important;
+*, html, body {
     box-sizing: border-box;
+}
+
+body, .stApp, p, div, h1, h2, h3, h4, h5, h6, span, input, textarea {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+/* Preserve Material Icon Fonts */
+[data-testid="stIconMaterial"], 
+[data-testid="collapsedControl"] *,
+[data-testid="stSidebarCollapseButton"] *,
+[data-testid="stHeader"] *,
+.material-symbols-outlined {
+    font-family: 'Material Symbols Rounded', 'Material Symbols Outlined', 'Material Icons', sans-serif !important;
+}
+
+html, body {
+    overflow-x: hidden !important;
+    max-width: 100vw !important;
+}
+
+/* ── Streamlit Container Padding ── */
+.main .block-container {
+    padding-top: 1.5rem !important;
+    padding-bottom: 2rem !important;
+    max-width: 100% !important;
 }
 
 /* ── App background ── */
@@ -44,13 +70,44 @@ st.markdown("""
     background-image: 
         radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.12) 0px, transparent 50%),
         radial-gradient(at 100% 100%, rgba(139, 92, 246, 0.1) 0px, transparent 50%) !important;
+    overflow-x: hidden !important;
 }
 .stAppHeader { background: transparent !important; }
 
-/* ── Streamlit chrome ── */
+/* ── Streamlit chrome & Sidebar Toggle ── */
 footer { visibility: hidden; }
 .stAppHeader { background: rgba(11, 15, 23, 0.7) !important; backdrop-filter: blur(10px); z-index: 99999; }
-[data-testid="collapsedControl"] { color: #ffffff !important; }
+
+[data-testid="collapsedControl"],
+[data-testid="stSidebarCollapseButton"] button {
+    background: rgba(30, 41, 59, 0.8) !important;
+    border: 1px solid rgba(99, 102, 241, 0.3) !important;
+    border-radius: 10px !important;
+    color: #a5b4fc !important;
+    padding: 6px 10px !important;
+    transition: all 0.2s ease !important;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3) !important;
+}
+[data-testid="collapsedControl"]:hover,
+[data-testid="stSidebarCollapseButton"] button:hover {
+    background: #6366f1 !important;
+    color: #ffffff !important;
+    border-color: #818cf8 !important;
+}
+
+/* ── Responsive Columns Layout (Mobile only) ── */
+@media (max-width: 768px) {
+    [data-testid="stColumn"] {
+        width: 100% !important;
+        flex: 1 1 100% !important;
+        min-width: 100% !important;
+    }
+    .main .block-container {
+        padding-left: 0.75rem !important;
+        padding-right: 0.75rem !important;
+        padding-top: 1rem !important;
+    }
+}
 
 /* ── Sidebar ── */
 [data-testid="stSidebar"] {
@@ -81,6 +138,13 @@ section[data-testid="stSidebar"] * { color: #94a3b8 !important; }
     border-bottom: 1px solid rgba(255,255,255,0.08);
     padding: 4px;
     border-radius: 12px;
+    overflow-x: auto !important;
+    flex-wrap: nowrap !important;
+    white-space: nowrap !important;
+    -webkit-overflow-scrolling: touch;
+}
+.stTabs [data-baseweb="tab-list"]::-webkit-scrollbar {
+    display: none;
 }
 .stTabs [data-baseweb="tab"] {
     background: transparent !important;
@@ -90,6 +154,7 @@ section[data-testid="stSidebar"] * { color: #94a3b8 !important; }
     font-weight: 600 !important;
     padding: 8px 16px !important;
     border: none !important;
+    flex-shrink: 0 !important;
 }
 .stTabs [aria-selected="true"] {
     background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(139, 92, 246, 0.2)) !important;
@@ -99,12 +164,12 @@ section[data-testid="stSidebar"] * { color: #94a3b8 !important; }
 }
 
 /* ── Dataframe ── */
-.stDataFrame { border-radius: 14px !important; }
+.stDataFrame { border-radius: 14px !important; width: 100% !important; }
 [data-testid="stDataFrame"] {
     background: #131b2e !important;
     border-radius: 14px;
     border: 1px solid rgba(255, 255, 255, 0.08);
-    overflow: hidden;
+    overflow-x: auto !important;
 }
 
 /* ── Buttons ── */
@@ -197,6 +262,7 @@ section[data-testid="stSidebar"] * { color: #94a3b8 !important; }
     display: flex;
     align-items: center;
     gap: 8px;
+    word-break: break-word;
 }
 .sb-divider {
     height: 1px;
@@ -328,6 +394,7 @@ section[data-testid="stSidebar"] * { color: #94a3b8 !important; }
     line-height: 1.65;
     max-width: 86%;
     word-wrap: break-word;
+    overflow-wrap: anywhere;
     box-shadow: 0 4px 16px rgba(79, 70, 229, 0.25);
     border: 1px solid rgba(255, 255, 255, 0.12);
 }
@@ -342,6 +409,7 @@ section[data-testid="stSidebar"] * { color: #94a3b8 !important; }
     line-height: 1.7;
     max-width: 94%;
     word-wrap: break-word;
+    overflow-wrap: anywhere;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
 }
 .msg-bot b, .msg-bot strong { color: #ffffff; }
@@ -392,6 +460,96 @@ section[data-testid="stSidebar"] * { color: #94a3b8 !important; }
     text-transform: uppercase;
     letter-spacing: 0.08em;
 }
+
+/* ── EVALUATION METRICS TABLE ── */
+.eval-table {
+    width: 100% !important;
+    border: none;
+    margin-top: 4px;
+    border-collapse: collapse;
+}
+.eval-label-col {
+    width: 130px;
+    border: none;
+    padding: 4px 0;
+    color: #94a3b8;
+}
+
+/* ── MOBILE MEDIA QUERIES (< 640px) ── */
+@media (max-width: 640px) {
+    .page-hdr {
+        gap: 12px;
+        padding: 16px 0 16px 0;
+        margin-bottom: 16px;
+    }
+    .page-hdr-icon {
+        width: 44px;
+        height: 44px;
+        font-size: 1.2rem;
+        border-radius: 12px;
+    }
+    .page-hdr-title {
+        font-size: 1.2rem !important;
+    }
+    .page-hdr-sub {
+        font-size: 0.78rem !important;
+    }
+    .msg-user {
+        max-width: 95% !important;
+        padding: 10px 14px !important;
+        font-size: 0.85rem !important;
+    }
+    .msg-bot {
+        max-width: 98% !important;
+        padding: 12px 14px !important;
+        font-size: 0.85rem !important;
+    }
+    .chat-empty {
+        padding: 32px 14px !important;
+    }
+    .chat-empty-icon {
+        width: 46px !important;
+        height: 46px !important;
+        font-size: 1.3rem !important;
+    }
+    .chat-empty-text {
+        font-size: 0.88rem !important;
+    }
+    .chat-empty-hint {
+        font-size: 0.75rem !important;
+    }
+    .stTabs [data-baseweb="tab"] {
+        padding: 6px 12px !important;
+        font-size: 0.78rem !important;
+    }
+    .eval-label-col {
+        width: 105px !important;
+        font-size: 0.78rem !important;
+    }
+}
+
+/* ── SMALL MOBILE MEDIA QUERIES (< 480px) ── */
+@media (max-width: 480px) {
+    .stat-grid {
+        grid-template-columns: 1fr !important;
+        gap: 8px !important;
+    }
+    .stat-card {
+        padding: 12px 14px !important;
+    }
+    .eval-table tr {
+        display: flex !important;
+        flex-direction: column !important;
+        margin-bottom: 6px !important;
+        border-bottom: 1px dashed rgba(255,255,255,0.06) !important;
+        padding-bottom: 4px !important;
+    }
+    .eval-table td {
+        width: 100% !important;
+        display: block !important;
+        padding: 1px 0 !important;
+    }
+}
 </style>
 """, unsafe_allow_html=True)
 
@@ -440,13 +598,20 @@ with st.sidebar:
         </div>
         """, unsafe_allow_html=True)
 
-    # Dokumen
+    # Dokumen Referensi dengan Preview
     st.markdown("<div class='sb-divider'></div>", unsafe_allow_html=True)
     st.markdown("<p class='sb-section'>Dokumen Referensi</p>", unsafe_allow_html=True)
     if os.path.exists(DOCUMENTS_DIR):
         files = [f for f in os.listdir(DOCUMENTS_DIR) if not f.startswith(".")]
         for f in files:
-            st.markdown(f"<div class='sb-file'>📄 {f}</div>", unsafe_allow_html=True)
+            file_path = os.path.join(DOCUMENTS_DIR, f)
+            with st.expander(f"📄 {f}"):
+                try:
+                    with open(file_path, "r", encoding="utf-8", errors="ignore") as doc_file:
+                        content = doc_file.read(300)
+                        st.caption(content + ("..." if len(content) >= 300 else ""))
+                except Exception:
+                    st.caption("Preview tidak dapat dimuat.")
 
     st.markdown("<div class='sb-divider'></div>", unsafe_allow_html=True)
 
@@ -461,7 +626,27 @@ with st.sidebar:
             vm.add_documents(chunks)
             st.success("Selesai!")
 
-    st.markdown("<div style='height:8px'></div>", unsafe_allow_html=True)
+    st.markdown("<div style='height:6px'></div>", unsafe_allow_html=True)
+
+    # Export Chat Button
+    if st.session_state.chat_history:
+        chat_export_txt = "=== LAPORAN AI JOSJIS ASSISTANT ===\n\n"
+        for msg in st.session_state.chat_history:
+            role = "ANDA" if msg["role"] == "user" else "ASSISTANT"
+            raw_text = msg["text"].replace("<br>", "\n")
+            if "<div style=" in raw_text:
+                raw_text = raw_text.split("<div style=")[0].strip()
+            chat_export_txt += f"[{role}]\n{raw_text}\n\n" + ("="*40) + "\n\n"
+        
+        st.download_button(
+            label="📥 Unduh Laporan Chat",
+            data=chat_export_txt,
+            file_name="laporan_josjis_assistant.txt",
+            mime="text/plain",
+            use_container_width=True
+        )
+
+    st.markdown("<div style='height:4px'></div>", unsafe_allow_html=True)
 
     if st.button("🗑️ Hapus Riwayat Chat", use_container_width=True):
         st.session_state.chat_history = []
@@ -535,6 +720,7 @@ with col_chat:
                 "user_query": query,
                 "user_id": "user",
                 "session_id": "session",
+                "chat_history": st.session_state.chat_history[-6:],
                 "intent": "",
                 "tasks": [],
                 "sql_results": [],
@@ -593,12 +779,12 @@ with col_chat:
     <div style="font-weight:700; color:#818cf8; font-size:0.8rem; letter-spacing:0.04em; margin-bottom:8px; display:flex; align-items:center; gap:6px;">
         📊 METRIK EVALUASI MODEL
     </div>
-    <table style="width:100%; border:none; margin-top:4px; border-collapse:collapse;">
-        <tr><td style="width:140px; border:none; padding:4px 0; color:#94a3b8;">🎯 <b>Akurasi</b></td><td style="border:none; padding:4px 0; color:#38bdf8; font-weight:600;">: {eval_metrics['accuracy']}%</td></tr>
-        <tr><td style="border:none; padding:4px 0; color:#94a3b8;">📏 <b>Efektivitas</b></td><td style="border:none; padding:4px 0; color:#38bdf8; font-weight:600;">: {eval_metrics['effectiveness']}%</td></tr>
-        <tr><td style="border:none; padding:4px 0; color:#94a3b8;">⚡ <b>Kecepatan</b></td><td style="border:none; padding:4px 0; color:#34d399; font-weight:600;">: {eval_metrics['efficiency_seconds']}s <span style="color:#64748b; font-weight:normal;">({eval_metrics['efficiency_rating']})</span></td></tr>
-        <tr><td style="border:none; padding:4px 0; color:#94a3b8;">🧠 <b>Halusinasi Risk</b></td><td style="border:none; padding:4px 0; color:#cbd5e1;">: {eval_metrics['hallucination_rating']}</td></tr>
-        <tr><td style="border:none; padding:4px 0; vertical-align:top; color:#94a3b8;">📚 <b>Sumber Data</b></td><td style="border:none; padding:4px 0; color:#a5b4fc;">: {sources_html}</td></tr>
+    <table class="eval-table">
+        <tr><td class="eval-label-col">🎯 <b>Akurasi</b></td><td style="border:none; padding:4px 0; color:#38bdf8; font-weight:600;">: {eval_metrics['accuracy']}%</td></tr>
+        <tr><td class="eval-label-col">📏 <b>Efektivitas</b></td><td style="border:none; padding:4px 0; color:#38bdf8; font-weight:600;">: {eval_metrics['effectiveness']}%</td></tr>
+        <tr><td class="eval-label-col">⚡ <b>Kecepatan</b></td><td style="border:none; padding:4px 0; color:#34d399; font-weight:600;">: {eval_metrics['efficiency_seconds']}s <span style="color:#64748b; font-weight:normal;">({eval_metrics['efficiency_rating']})</span></td></tr>
+        <tr><td class="eval-label-col">🧠 <b>Halusinasi Risk</b></td><td style="border:none; padding:4px 0; color:#cbd5e1;">: {eval_metrics['hallucination_rating']}</td></tr>
+        <tr><td class="eval-label-col" style="vertical-align:top;">📚 <b>Sumber Data</b></td><td style="border:none; padding:4px 0; color:#a5b4fc;">: {sources_html}</td></tr>
     </table>
 </div>
 '''
@@ -616,12 +802,25 @@ with col_dash:
 
     # ── Tab Produk ──
     with tab1:
-        top_df = SuperstoreDataLoader.get_top_products(top_n=10)
-        if not top_df.empty:
-            disp = top_df[["Product_Name", "Category", "Total_Sales", "Total_Quantity"]].copy()
+        col_search1, col_search2 = st.columns([0.6, 0.4])
+        with col_search1:
+            kw_search = st.text_input("🔍 Cari produk", key="prod_kw_search", placeholder="Ketik nama produk...")
+        with col_search2:
+            cat_filter = st.selectbox("Kategori", ["Semua", "Furniture", "Office Supplies", "Technology"], key="prod_cat_filter")
+
+        cat_param = None if cat_filter == "Semua" else cat_filter
+        filtered_df = SuperstoreDataLoader.get_products(
+            keyword=kw_search if kw_search else None,
+            category=cat_param,
+            top_n=15
+        )
+        if not filtered_df.empty:
+            disp = filtered_df[["Product_Name", "Category", "Total_Sales", "Total_Quantity"]].copy()
             disp.columns = ["Produk", "Kategori", "Penjualan ($)", "Qty"]
             disp["Penjualan ($)"] = disp["Penjualan ($)"].apply(lambda x: f"${x:,.0f}")
-            st.dataframe(disp, use_container_width=True, hide_index=True, height=380)
+            st.dataframe(disp, use_container_width=True, hide_index=True, height=330)
+        else:
+            st.info("Tidak ada produk yang cocok.")
 
     # ── Tab Penjualan ──
     with tab2:
@@ -650,16 +849,56 @@ with col_dash:
         by_cat = SuperstoreDataLoader.get_finance_by_category()
         if not by_cat.empty:
             st.markdown("<p class='chart-title'>Omzet per Kategori</p>", unsafe_allow_html=True)
-            st.bar_chart(by_cat.set_index("Category")["Total_Sales"], height=160, color="#3b82f6")
+            fig_cat = px.bar(
+                by_cat,
+                x="Category",
+                y="Total_Sales",
+                color="Total_Sales",
+                color_continuous_scale=["#4f46e5", "#6366f1", "#38bdf8"]
+            )
+            fig_cat.update_layout(
+                paper_bgcolor="rgba(0,0,0,0)",
+                plot_bgcolor="rgba(0,0,0,0)",
+                margin=dict(l=5, r=5, t=10, b=10),
+                height=180,
+                showlegend=False,
+                coloraxis_showscale=False,
+                font=dict(color="#94a3b8", family="Plus Jakarta Sans"),
+                xaxis=dict(title="", showgrid=False, tickfont=dict(size=11, color="#cbd5e1")),
+                yaxis=dict(title="", showgrid=True, gridcolor="rgba(255,255,255,0.06)", tickprefix="$"),
+                hoverlabel=dict(bgcolor="#1e293b", font_size=12, font_family="Plus Jakarta Sans")
+            )
+            fig_cat.update_traces(
+                hovertemplate="<b>%{x}</b><br>Omzet: $%{y:,.2f}<extra></extra>"
+            )
+            st.plotly_chart(fig_cat, use_container_width=True, config={"displayModeBar": False})
 
         by_reg = SuperstoreDataLoader.get_sales_by_region()
         if not by_reg.empty:
-            st.markdown("<p class='chart-title'>Per Region</p>", unsafe_allow_html=True)
-            rd = by_reg[["Region", "Total_Sales", "Total_Profit"]].copy()
-            rd.columns = ["Region", "Penjualan ($)", "Profit ($)"]
-            rd["Penjualan ($)"] = rd["Penjualan ($)"].apply(lambda x: f"${x:,.0f}")
-            rd["Profit ($)"] = rd["Profit ($)"].apply(lambda x: f"${x:,.0f}")
-            st.dataframe(rd, use_container_width=True, hide_index=True, height=175)
+            st.markdown("<p class='chart-title'>Omzet Per Region</p>", unsafe_allow_html=True)
+            fig_reg = px.pie(
+                by_reg,
+                names="Region",
+                values="Total_Sales",
+                hole=0.45,
+                color_discrete_sequence=["#6366f1", "#38bdf8", "#8b5cf6", "#34d399"]
+            )
+            fig_reg.update_layout(
+                paper_bgcolor="rgba(0,0,0,0)",
+                plot_bgcolor="rgba(0,0,0,0)",
+                margin=dict(l=10, r=10, t=10, b=10),
+                height=210,
+                showlegend=True,
+                legend=dict(orientation="h", yanchor="bottom", y=-0.2, xanchor="center", x=0.5, font=dict(color="#cbd5e1", size=10)),
+                font=dict(color="#94a3b8", family="Plus Jakarta Sans"),
+                hoverlabel=dict(bgcolor="#1e293b", font_size=12, font_family="Plus Jakarta Sans")
+            )
+            fig_reg.update_traces(
+                textposition="inside",
+                textinfo="percent+label",
+                hovertemplate="<b>Region %{label}</b><br>Omzet: $%{value:,.2f}<extra></extra>"
+            )
+            st.plotly_chart(fig_reg, use_container_width=True, config={"displayModeBar": False})
 
     # ── Tab Kepuasan ──
     with tab3:
@@ -681,11 +920,32 @@ with col_dash:
             dist = csat.get("csat_distribution", {})
             if dist:
                 st.markdown("<p class='chart-title'>Distribusi Skor CSAT</p>", unsafe_allow_html=True)
-                dist_df = pd.DataFrame.from_dict(
-                    {str(k): v for k, v in sorted(dist.items())},
-                    orient="index", columns=["Jumlah"]
+                dist_df = pd.DataFrame([
+                    {"Skor": f"{k} ⭐", "Jumlah": v} for k, v in sorted(dist.items())
+                ])
+                fig_csat = px.bar(
+                    dist_df,
+                    x="Skor",
+                    y="Jumlah",
+                    color="Jumlah",
+                    color_continuous_scale=["#059669", "#10b981", "#34d399"]
                 )
-                st.bar_chart(dist_df, height=160, color="#10b981")
+                fig_csat.update_layout(
+                    paper_bgcolor="rgba(0,0,0,0)",
+                    plot_bgcolor="rgba(0,0,0,0)",
+                    margin=dict(l=5, r=5, t=10, b=10),
+                    height=180,
+                    showlegend=False,
+                    coloraxis_showscale=False,
+                    font=dict(color="#94a3b8", family="Plus Jakarta Sans"),
+                    xaxis=dict(title="", showgrid=False, tickfont=dict(size=11, color="#cbd5e1")),
+                    yaxis=dict(title="", showgrid=True, gridcolor="rgba(255,255,255,0.06)"),
+                    hoverlabel=dict(bgcolor="#1e293b", font_size=12, font_family="Plus Jakarta Sans")
+                )
+                fig_csat.update_traces(
+                    hovertemplate="<b>%{x}</b><br>Jumlah: %{y:,} kasus<extra></extra>"
+                )
+                st.plotly_chart(fig_csat, use_container_width=True, config={"displayModeBar": False})
 
         complaints = SuperstoreDataLoader.get_complaints_by_category(top_n=5)
         if not complaints.empty:

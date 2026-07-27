@@ -10,7 +10,7 @@ logger = logging.getLogger(__name__)
 def planner_node(state: EnterpriseState) -> dict:
     logger.info("Entering Planner Node")
     planner = Planner()
-    tasks = planner.generate_plan(state["user_query"])
+    tasks = planner.generate_plan(state["user_query"], chat_history=state.get("chat_history", []))
     return {"tasks": tasks}
 
 def manager_node(state: EnterpriseState) -> dict:

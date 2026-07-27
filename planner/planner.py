@@ -11,7 +11,7 @@ class Planner:
     def __init__(self):
         self.llm = OllamaModel(temperature=0.1).get_llm()
 
-    def generate_plan(self, query: str) -> list:
+    def generate_plan(self, query: str, chat_history: list = None) -> list:
         q = query.lower().strip()
 
         # ─── PRIORITY KEYWORD ROUTING (tidak perlu panggil LLM) ──────────────
@@ -20,10 +20,26 @@ class Planner:
             logger.info(f"Planner: keyword routing → {[t['agent'] for t in tasks]}")
             return tasks
 
+        # Format recent conversation context
+        history_str = ""
+        if chat_history:
+            recent = chat_history[-6:]
+            lines = []
+            for m in recent:
+                role = "User" if m.get("role") == "user" else "Assistant"
+                text = m.get("text", m.get("content", ""))
+                if "<div style=" in text:
+                    text = text.split("<div style=")[0].strip()
+                lines.append(f"{role}: {text}")
+            history_str = "\n".join(lines)
+
         # ─── LLM ROUTING (sebagai fallback jika keyword tidak cocok) ─────────
         prompt = f"""
 Anda adalah AI Enterprise Planner untuk POS Nikky Superstore.
 Tentukan agent mana yang harus menangani pertanyaan user berikut.
+
+Riwayat Percakapan Sebelumnya:
+{history_str if history_str else "Belum ada riwayat."}
 
 Specialist Agents yang tersedia:
 1. inventory  : info produk, daftar barang, kategori, stok, quantity
@@ -34,12 +50,13 @@ Specialist Agents yang tersedia:
 6. purchasing : rencana pembelian ke supplier
 
 Aturan:
+- Gunakan riwayat percakapan untuk memahami konteks pertanyaan jika user menggunakan rujukan (misal: "dia", "produk tersebut", "pelanggan itu").
 - Pilih 1-2 agent yang paling relevan saja.
 - WAJIB output berupa JSON array valid. Contoh: [{{"agent": "inventory", "task": "{query}"}}]
 - Nilai "task" HARUS berisi pertanyaan user secara lengkap, BUKAN label pendek.
 - Hanya keluarkan JSON, tanpa penjelasan, tanpa markdown.
 
-Pertanyaan User: "{query}"
+Pertanyaan User Saat Ini: "{query}"
 """
 
         try:
