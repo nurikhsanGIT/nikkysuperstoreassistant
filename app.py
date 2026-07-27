@@ -47,10 +47,10 @@ st.markdown("""
 }
 .stAppHeader { background: transparent !important; }
 
-/* ── Hide Streamlit chrome ── */
-#MainMenu, footer { visibility: hidden; }
-header { visibility: visible !important; background: transparent !important; }
-[data-testid="stToolbar"] { display: none; }
+/* ── Streamlit chrome ── */
+footer { visibility: hidden; }
+.stAppHeader { background: rgba(11, 15, 23, 0.7) !important; backdrop-filter: blur(10px); z-index: 99999; }
+[data-testid="collapsedControl"] { color: #ffffff !important; }
 
 /* ── Sidebar ── */
 [data-testid="stSidebar"] {
