@@ -20,7 +20,7 @@ import logging
 
 # ─── Page Config ──────────────────────────────────────────────────────────────
 st.set_page_config(
-    page_title="Nikky Superstore AI",
+    page_title="Josjis Superstore AI",
     page_icon="🛒",
     layout="wide",
     initial_sidebar_state="expanded"
@@ -48,7 +48,8 @@ st.markdown("""
 .stAppHeader { background: transparent !important; }
 
 /* ── Hide Streamlit chrome ── */
-#MainMenu, footer, header { visibility: hidden; }
+#MainMenu, footer { visibility: hidden; }
+header { visibility: visible !important; background: transparent !important; }
 [data-testid="stToolbar"] { display: none; }
 
 /* ── Sidebar ── */
@@ -410,7 +411,7 @@ with st.sidebar:
     # Brand header
     st.markdown("""
     <div class="sb-brand">
-        <p class="sb-brand-name">🛒 Nikky Enterprise AI</p>
+        <p class="sb-brand-name">🛒 Josjis Enterprise AI</p>
         <p class="sb-brand-tag">MULTI-AGENT BUSINESS ASSISTANT</p>
     </div>
     <div class="status-pill">
@@ -472,7 +473,7 @@ st.markdown("""
 <div class="page-hdr">
     <div class="page-hdr-icon">🛒</div>
     <div>
-        <p class="page-hdr-title">Nikky Superstore Assistant</p>
+        <p class="page-hdr-title">Josjis Superstore Assistant</p>
         <p class="page-hdr-sub">Tanyakan tentang produk, penjualan, keuangan, atau layanan pelanggan</p>
     </div>
 </div>
