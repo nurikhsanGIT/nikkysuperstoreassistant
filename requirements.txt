@@ -14,4 +14,4 @@ scikit-learn
 pymysql
 cryptography
 langchain-groq
-pysqlite3-binary
+plotly
