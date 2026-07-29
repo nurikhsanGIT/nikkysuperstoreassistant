@@ -876,27 +876,30 @@ with col_dash:
         by_reg = SuperstoreDataLoader.get_sales_by_region()
         if not by_reg.empty:
             st.markdown("<p class='chart-title'>Omzet Per Region</p>", unsafe_allow_html=True)
-            fig_reg = px.pie(
-                by_reg,
-                names="Region",
-                values="Total_Sales",
-                hole=0.45,
-                color_discrete_sequence=["#6366f1", "#38bdf8", "#8b5cf6", "#34d399"]
+            by_reg_sorted = by_reg.sort_values("Total_Sales", ascending=True)
+            fig_reg = px.bar(
+                by_reg_sorted,
+                x="Total_Sales",
+                y="Region",
+                orientation="h",
+                color="Total_Sales",
+                color_continuous_scale=["#4f46e5", "#6366f1", "#38bdf8", "#34d399"],
+                custom_data=["Total_Profit"]
             )
             fig_reg.update_layout(
                 paper_bgcolor="rgba(0,0,0,0)",
                 plot_bgcolor="rgba(0,0,0,0)",
-                margin=dict(l=10, r=10, t=10, b=10),
-                height=210,
-                showlegend=True,
-                legend=dict(orientation="h", yanchor="bottom", y=-0.2, xanchor="center", x=0.5, font=dict(color="#cbd5e1", size=10)),
+                margin=dict(l=5, r=10, t=10, b=10),
+                height=320,
+                showlegend=False,
+                coloraxis_showscale=False,
                 font=dict(color="#94a3b8", family="Plus Jakarta Sans"),
+                xaxis=dict(title="", showgrid=True, gridcolor="rgba(255,255,255,0.06)", tickprefix="$"),
+                yaxis=dict(title="", showgrid=False, tickfont=dict(size=11, color="#cbd5e1")),
                 hoverlabel=dict(bgcolor="#1e293b", font_size=12, font_family="Plus Jakarta Sans")
             )
             fig_reg.update_traces(
-                textposition="inside",
-                textinfo="percent+label",
-                hovertemplate="<b>Region %{label}</b><br>Omzet: $%{value:,.2f}<extra></extra>"
+                hovertemplate="<b>Region %{y}</b><br>Omzet: $%{x:,.2f}<br>Profit: $%{customdata[0]:,.2f}<extra></extra>"
             )
             st.plotly_chart(fig_reg, use_container_width=True, config={"displayModeBar": False})
 
