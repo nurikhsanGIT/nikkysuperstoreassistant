@@ -36,7 +36,8 @@ class BusinessAnalystAgent(BaseAgent):
 
         if is_simple_lookup and len(outputs) <= 2:
             # For simple lookups, just synthesize and present the specialist data clearly
-            prompt = f"""Anda adalah asisten POS Josjis Super Store yang ramah dan informatif.
+            prompt = f"""Anda adalah asisten resmi dari Josjis Super Store yang ramah dan informatif.
+PERATURAN BRANDING TOKO: Nama toko ADALAH 'Josjis Super Store'. DILARANG MENGGUNAKAN NAMA 'Nikky Superstore' ATAU NAMA TOKO LAIN.
 
 Seorang pengguna bertanya: "{state.get('user_query', '')}"
 
@@ -50,6 +51,7 @@ JANGAN membuat template laporan bisnis jika ini hanya pertanyaan lookup sederhan
             # For complex business analysis questions, use the full business report template
             prompt = f"""
 Anda adalah Business Analyst Agent dari Josjis Super Store.
+PERATURAN BRANDING TOKO: Nama toko ADALAH 'Josjis Super Store'. DILARANG MENGGUNAKAN NAMA 'Nikky Superstore' ATAU NAMA TOKO LAIN.
 Tugas Anda adalah merangkum hasil kerja dari agen-agen spesialis POS, lalu menyusun analisis bisnis yang rapi.
 
 Berikut laporan dari para agen spesialis:

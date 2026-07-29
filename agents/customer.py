@@ -23,6 +23,16 @@ class CustomerAgent(BaseAgent):
         user_query = state.get("user_query", task_desc)
         q = user_query.lower()
 
+        # Deteksi pertanyaan sapaan sederhana
+        greetings = ["halo", "hi", "hello", "hai", "p", "ping", "selamat pagi", "selamat siang", "selamat sore", "selamat malam", "tes", "test"]
+        if q.strip() in greetings or q.strip().startswith("halo ") or q.strip().startswith("hi "):
+            return {
+                "agent_name": self.name,
+                "response": "Selamat datang di Josjis Super Store! Saya senang membantu Anda dengan pertanyaan atau kebutuhan Anda. Apa yang bisa saya bantu hari ini?",
+                "response_time": time.time() - start_time,
+                "context_used": "Greeting response"
+            }
+
         # Ambil konteks RAG dari ChromaDB (SOP/FAQ dokumen)
         rag_context = self.rag_tool.get_relevant_context(user_query, k=3)
 
@@ -53,7 +63,11 @@ class CustomerAgent(BaseAgent):
 
         prompt = ChatPromptTemplate.from_messages([
             ("system", (
-                "Anda adalah AI Customer Service Agent dari Josjis Super Store.\n"
+                "Anda adalah AI Customer Service Agent resmi dari Josjis Super Store.\n"
+                "PERATURAN PENTING IDENTITAS TOKO:\n"
+                "- Nama toko Anda ADALAH 'Josjis Super Store' (BUKAN Nikky Superstore atau nama toko lainnya).\n"
+                "- DILARANG KERAS menggunakan atau menyebut nama toko 'Nikky Superstore' dalam kondisi apapun.\n"
+                "- Jika menyapa pengguna, SELALU gunakan: 'Selamat datang di Josjis Super Store!'\n\n"
                 "Informasi Sistem: Anda adalah bagian dari Enterprise AI Assistant Josjis Super Store yang memiliki 6 agen spesialis (Manager, Customer, Inventory, Finance, Sales, Marketing).\n"
                 "Tugas Anda: menjawab pertanyaan pelanggan dengan ramah, informatif, dan ringkas "
                 "sesuai data SOP/FAQ perusahaan dan data kepuasan pelanggan berikut:\n"

@@ -9,20 +9,33 @@ class RAGTool:
     """Wrapper class for retrieving context documents from ChromaDB."""
     
     def __init__(self):
-        self.retriever = DocumentRetriever()
+        self._retriever = None
+
+    @property
+    def retriever(self):
+        if self._retriever is None:
+            try:
+                from rag.retriever import DocumentRetriever
+                self._retriever = DocumentRetriever()
+            except Exception as e:
+                logger.warning(f"DocumentRetriever unavailable: {e}")
+                self._retriever = None
+        return self._retriever
 
     def retrieve(self, query: str, k: int = 3) -> List[Document]:
         try:
-            logger.info(f"Retrieving documents via RAGTool for: {query}")
-            return self.retriever.retrieve(query, k=k)
+            r = self.retriever
+            if r:
+                logger.info(f"Retrieving documents via RAGTool for: {query}")
+                return r.retrieve(query, k=k)
         except Exception as e:
             logger.error(f"RAGTool retrieval error: {e}")
-            return []
+        return []
             
     def get_relevant_context(self, query: str, k: int = 3) -> str:
         docs = self.retrieve(query, k=k)
         if not docs:
-            return "No document records found in database."
+            return "Tidak ada dokumen tambahan yang ditemukan di database RAG."
         
         context_parts = []
         for doc in docs:
