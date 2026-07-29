@@ -115,9 +115,7 @@ Pertanyaan User Saat Ini: "{query}"
             "kategori", "category", "daftar", "info", "data barang",
             "furniture", "technology", "office", "quantity"
         ]):
-            # Hindari duplikasi jika sudah ada sales/marketing agent
-            if not any(t["agent"] in ["sales", "marketing"] for t in tasks):
-                tasks.append({"agent": "inventory", "task": original_query})
+            tasks.append({"agent": "inventory", "task": original_query})
 
         # Customer / FAQ / SOP / General Meta
         if any(k in q for k in [
