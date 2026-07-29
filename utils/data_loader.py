@@ -38,6 +38,12 @@ class SuperstoreDataLoader:
                         cls._superstore_df[col] = pd.to_numeric(
                             cls._superstore_df[col], errors="coerce"
                         ).fillna(0)
+                
+                # Parse tanggal
+                for col in ["Order_Date", "Ship_Date"]:
+                    if col in cls._superstore_df.columns:
+                        cls._superstore_df[col] = pd.to_datetime(cls._superstore_df[col], errors="coerce")
+                        
                 logger.info(f"Superstore dataset loaded: {len(cls._superstore_df)} rows.")
             except Exception as e:
                 logger.error(f"Failed to load superstore.csv: {e}")
@@ -200,10 +206,16 @@ class SuperstoreDataLoader:
         csat_col = "CSAT Score"
         if csat_col not in df.columns:
             return {}
+        top_cat = "N/A"
+        if "category" in df.columns:
+            mode_series = df["category"].mode()
+            if not mode_series.empty:
+                top_cat = str(mode_series[0])
+
         return {
             "avg_csat": round(float(df[csat_col].mean()), 2),
             "total_complaints": len(df),
-            "top_category": str(df["category"].mode()[0]) if "category" in df.columns else "N/A",
+            "top_category": top_cat,
             "csat_distribution": df[csat_col].value_counts().to_dict(),
         }
 
