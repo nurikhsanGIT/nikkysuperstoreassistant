@@ -18,7 +18,7 @@ class PurchasingAgent(BaseAgent):
         start_time = time.time()
         
         prompt = f"""
-Anda adalah AI Purchasing Agent dari Nikky Superstore.
+Anda adalah AI Purchasing Agent dari Josjis Super Store.
 Tugas Anda adalah merencanakan pembelian stok kembali dan mengoordinasikan pengadaan barang.
 Tugas/Pertanyaan: {task_desc}
 

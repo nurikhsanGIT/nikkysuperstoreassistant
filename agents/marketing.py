@@ -48,7 +48,7 @@ class MarketingAgent(BaseAgent):
         llm_input = json.dumps(data_context, ensure_ascii=False)
 
         llm_prompt = (
-            f"Anda adalah Marketing Agent dari Nikky Superstore.\n"
+            f"Anda adalah Marketing Agent dari Josjis Super Store.\n"
             f"Berikut data {data_label} dari dataset Superstore:\n{llm_input}\n\n"
             f"Keterangan field:\n"
             f"- Product_Name: nama produk\n"

@@ -9,7 +9,7 @@ import logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-app = FastAPI(title="Nikky Frozen Enterprise AI API", version="1.0")
+app = FastAPI(title="Josjis Super Store Enterprise AI API", version="1.0")
 
 app.add_middleware(
     CORSMiddleware,

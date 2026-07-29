@@ -1,6 +1,6 @@
-# Enterprise Multi-Agent AI Assistant - Nikky Frozen
+# Enterprise Multi-Agent AI Assistant - Josjis Super Store
 
-Aplikasi AI Assistant berbasis Multi-Agent System menggunakan LangChain, LangGraph, Ollama (Llama 3.2), ChromaDB, dan Streamlit. Sistem ini dirancang untuk membantu operasional bisnis frozen food (Nikky Frozen) di beberapa divisi.
+Aplikasi AI Assistant berbasis Multi-Agent System menggunakan LangChain, LangGraph, Ollama (Llama 3.2), ChromaDB, dan Streamlit. Sistem ini dirancang untuk membantu operasional bisnis ritel dan persediaan di beberapa divisi Josjis Super Store.
 
 ---
 

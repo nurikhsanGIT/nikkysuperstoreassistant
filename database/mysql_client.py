@@ -6,7 +6,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 class MySQLClient:
-    """Manages direct read-only SQL execution on the Nikky Frozen MySQL Database."""
+    """Manages direct read-only SQL execution on the Josjis Super Store MySQL Database."""
     
     _engine = None
 
@@ -18,7 +18,7 @@ class MySQLClient:
             db_pass = ""
             db_host = "127.0.0.1"
             db_port = "3306"
-            db_name = "pos_nikky_frozen"
+            db_name = "pos_josjis_superstore"
 
             laravel_env_path = os.path.join(os.path.dirname(__file__), "..", "..", "backend", ".env")
             if os.path.exists(laravel_env_path):

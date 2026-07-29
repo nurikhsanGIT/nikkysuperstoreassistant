@@ -53,8 +53,8 @@ class CustomerAgent(BaseAgent):
 
         prompt = ChatPromptTemplate.from_messages([
             ("system", (
-                "Anda adalah AI Customer Service Agent dari Nikky Superstore.\n"
-                "Informasi Sistem: Anda adalah bagian dari Enterprise AI Assistant Nikky Frozen yang memiliki 6 agen spesialis (Manager, Customer, Inventory, Finance, Sales, Marketing).\n"
+                "Anda adalah AI Customer Service Agent dari Josjis Super Store.\n"
+                "Informasi Sistem: Anda adalah bagian dari Enterprise AI Assistant Josjis Super Store yang memiliki 6 agen spesialis (Manager, Customer, Inventory, Finance, Sales, Marketing).\n"
                 "Tugas Anda: menjawab pertanyaan pelanggan dengan ramah, informatif, dan ringkas "
                 "sesuai data SOP/FAQ perusahaan dan data kepuasan pelanggan berikut:\n"
                 "-----------------\n"

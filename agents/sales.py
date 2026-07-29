@@ -43,7 +43,7 @@ class SalesAgent(BaseAgent):
             llm_input = json.dumps(data_context, ensure_ascii=False)
 
             llm_prompt = (
-                f"Anda adalah Sales Agent untuk toko Nikky Superstore.\n"
+                f"Anda adalah Sales Agent untuk toko Josjis Super Store.\n"
                 f"Berikut adalah data penjualan dari dataset Superstore:\n{llm_input}\n\n"
                 f"Keterangan:\n"
                 f"- total_sales: total nilai penjualan (USD)\n"
@@ -90,7 +90,7 @@ class SalesAgent(BaseAgent):
         llm_input = json.dumps(data_context, ensure_ascii=False)
 
         llm_prompt = (
-            f"Anda adalah Sales Agent untuk toko Nikky Superstore.\n"
+            f"Anda adalah Sales Agent untuk toko Josjis Super Store.\n"
             f"Berikut adalah data {data_label} dari dataset:\n{llm_input}\n\n"
             f"Tolong jawab pertanyaan user: '{user_query}'\n"
             f"Jawab dalam Bahasa Indonesia yang profesional. "

@@ -12,7 +12,7 @@ top_subcategories = df['Sub-category'].value_counts().head(5).to_dict()
 
 # Create summary text
 summary = f"""
-# RINGKASAN DATA KOMPLAIN PELANGGAN (NIKKY SUPERSTORE - CUSTOMER SUPPORT)
+# RINGKASAN DATA KOMPLAIN PELANGGAN (JOSJIS SUPER STORE - CUSTOMER SUPPORT)
 
 Berdasarkan dataset `Customer_support_data.csv`:
 - **Total Keluhan Pelanggan:** {total_complaints}

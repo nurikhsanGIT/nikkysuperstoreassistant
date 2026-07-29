@@ -22,7 +22,7 @@ class ReflectionAgent(BaseAgent):
         findings = state.get("findings", "")
         
         prompt = f"""
-Anda adalah Reflection Agent dari Nikky Superstore.
+Anda adalah Reflection Agent dari Josjis Super Store.
 Tugas Anda adalah menilai apakah data/laporan analisis bisnis yang diajukan sudah menjawab pertanyaan user dengan cukup lengkap dan meyakinkan.
 
 Pertanyaan User: {user_query}

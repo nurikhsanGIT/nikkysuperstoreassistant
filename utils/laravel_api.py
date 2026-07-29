@@ -16,7 +16,7 @@ def _fmt(val) -> str:
 
 
 class LaravelAPI:
-    """Fetches live data from the Nikky Frozen Laravel POS REST API."""
+    """Fetches live data from the Josjis Super Store Laravel POS REST API."""
 
     # ------------------------------------------------------------------ #
     #  PRODUCTS  –  /api/products
@@ -156,7 +156,7 @@ class LaravelAPI:
                 cat_lines.append(f"  - {c.get('name', '?')}: {c.get('value', 0)}%")
 
             summary = (
-                f"=== RINGKASAN BISNIS NIKKY FROZEN ===\n"
+                f"=== RINGKASAN BISNIS JOSJIS SUPER STORE ===\n"
                 f"Total Produk: {total_products}\n"
                 f"Total Stok Seluruh Cabang: {total_stocks} unit\n"
                 f"Produk Stok Rendah: {low_stock}\n"

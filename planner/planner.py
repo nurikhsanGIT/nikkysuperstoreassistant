@@ -35,7 +35,7 @@ class Planner:
 
         # ─── LLM ROUTING (sebagai fallback jika keyword tidak cocok) ─────────
         prompt = f"""
-Anda adalah AI Enterprise Planner untuk POS Nikky Superstore.
+Anda adalah AI Enterprise Planner untuk POS Josjis Super Store.
 Tentukan agent mana yang harus menangani pertanyaan user berikut.
 
 Riwayat Percakapan Sebelumnya:

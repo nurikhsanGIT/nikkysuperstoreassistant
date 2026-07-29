@@ -35,7 +35,7 @@ class FinanceAgent(BaseAgent):
         llm_input = json.dumps(data_context, ensure_ascii=False)
 
         llm_prompt = (
-            f"Anda adalah Finance Agent dari Nikky Superstore.\n"
+            f"Anda adalah Finance Agent dari Josjis Super Store.\n"
             f"Berikut data keuangan lengkap dari dataset Superstore:\n{llm_input}\n\n"
             f"Keterangan field:\n"
             f"- total_sales: total pendapatan/omzet (USD)\n"
@@ -59,7 +59,7 @@ class FinanceAgent(BaseAgent):
             logger.error(f"Finance Agent LLM failed: {e}")
             s = finance_summary
             final_response = (
-                f"**Ringkasan Keuangan Nikky Superstore:**\n"
+                f"**Ringkasan Keuangan Josjis Super Store:**\n"
                 f"- Total Omzet: ${s.get('total_sales', 0):,.2f}\n"
                 f"- Total Laba: ${s.get('total_profit', 0):,.2f}\n"
                 f"- Total Unit Terjual: {s.get('total_quantity', 0):,}\n"

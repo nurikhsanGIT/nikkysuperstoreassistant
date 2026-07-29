@@ -61,7 +61,7 @@ class InventoryAgent(BaseAgent):
         llm_input = json.dumps(data_context, ensure_ascii=False)
 
         llm_prompt = (
-            f"Anda adalah Inventory Agent untuk toko Nikky Superstore.\n"
+            f"Anda adalah Inventory Agent untuk toko Josjis Super Store.\n"
             f"Berikut adalah data produk dari dataset Superstore (maks {top_n} item):\n{llm_input}\n\n"
             f"Keterangan field:\n"
             f"- Product_Name: nama produk\n"

@@ -7,12 +7,12 @@ from trl import SFTTrainer
 from datasets import Dataset
 
 # ==========================================
-# 1. PERSIAPAN DATASET NIKKY FROZEN
+# 1. PERSIAPAN DATASET JOSJIS SUPER STORE
 # ==========================================
 print("Memuat dataset Customer Support...")
 df = pd.read_csv("datasets/Customer_support_data.csv")
 
-# Kita asumsikan dataset ini adalah keluhan pelanggan dari cabang-cabang Nikky Frozen.
+# Kita asumsikan dataset ini adalah keluhan pelanggan dari cabang-cabang Josjis Super Store.
 # Karena dataset aslinya sangat besar (85.000+ baris), untuk Fine-Tuning kita 
 # hanya akan mengambil subset data yang valid (misalnya memiliki Remarks dan CSAT).
 df_clean = df.dropna(subset=["Customer Remarks", "CSAT Score"]).copy()
@@ -31,12 +31,20 @@ df_sample = df_clean.sample(1000, random_state=42)
 
 # Format dataset menjadi Prompt Instruction yang dimengerti Llama
 def format_prompt(row):
-    instruction = f"Analisislah keluhan pelanggan Nikky Frozen POS berikut. Kategori: {row['category']}. Sub-kategori: {row['Sub-category']}."
+    instruction = f"Analisislah keluhan pelanggan Josjis Super Store POS berikut. Kategori: {row['category']}. Sub-kategori: {row['Sub-category']}."
     input_text = row['Customer Remarks']
-    response = f"Berdasarkan ulasan, CSAT pelanggan ini adalah {row['CSAT Score']}/5 ({row['Sentiment']}). Tindak lanjut disarankan untuk memperbaiki {row['category']}."
+    response = (
+        f"Berdasarkan ulasan, CSAT pelanggan ini adalah {row['CSAT Score']}/5 ({row['Sentiment']}). "
+        f"Tindak lanjut disarankan untuk memperbaiki {row['category']}."
+    )
     
     # Llama 3 Prompt Format
-    prompt = f"<|begin_of_text|><|start_header_id|>system<|end_header_id|>\n\nAnda adalah agen Customer Service Analyst di Nikky Frozen.<|eot_id|><|start_header_id|>user<|end_header_id|>\n\n{instruction}\n\nKeluhan: {input_text}<|eot_id|><|start_header_id|>assistant<|end_header_id|>\n\n{response}<|eot_id|>"
+    prompt = (
+        f"<|begin_of_text|><|start_header_id|>system<|end_header_id|>\n\n"
+        f"Anda adalah agen Customer Service Analyst di Josjis Super Store.<|eot_id|>"
+        f"<|start_header_id|>user<|end_header_id|>\n\n{instruction}\n\n"
+        f"Keluhan: {input_text}<|eot_id|><|start_header_id|>assistant<|end_header_id|>\n\n{response}<|eot_id|>"
+    )
     return prompt
 
 df_sample["text"] = df_sample.apply(format_prompt, axis=1)
@@ -86,7 +94,7 @@ model = get_peft_model(model, peft_config)
 # ==========================================
 print("\nMenyiapkan Parameter Training (Epochs, Batch Size, dll)...")
 training_args = TrainingArguments(
-    output_dir="./llama3-nikky-frozen-finetuned",
+    output_dir="./llama3-josjis-superstore-finetuned",
     per_device_train_batch_size=4,
     gradient_accumulation_steps=4,
     optim="paged_adamw_32bit",
@@ -119,9 +127,9 @@ print("\nMemulai Proses Fine-Tuning Llama 3...")
 trainer.train()
 
 # Simpan model yang sudah di-Fine Tune
-trainer.model.save_pretrained("llama3-nikky-frozen-final")
-tokenizer.save_pretrained("llama3-nikky-frozen-final")
+trainer.model.save_pretrained("llama3-josjis-superstore-final")
+tokenizer.save_pretrained("llama3-josjis-superstore-final")
 print("Proses Fine-Tuning Selesai!")
 '''
 
-print("\n[SIMULASI BERHASIL] - Kode Fine-Tuning Llama 3 dengan dataset Customer Support untuk sistem Nikky Frozen POS telah siap dipresentasikan.")
+print("\n[SIMULASI BERHASIL] - Kode Fine-Tuning Llama 3 dengan dataset Customer Support untuk sistem Josjis Super Store POS telah siap dipresentasikan.")
