@@ -25,7 +25,7 @@ class CustomerAgent(BaseAgent):
 
         # Deteksi pertanyaan sapaan sederhana
         greetings = ["halo", "hi", "hello", "hai", "p", "ping", "selamat pagi", "selamat siang", "selamat sore", "selamat malam", "tes", "test"]
-        if q.strip() in greetings or q.strip().startswith("halo ") or q.strip().startswith("hi "):
+        if q.strip() in greetings:
             return {
                 "agent_name": self.name,
                 "response": "Selamat datang di Josjis Super Store! Saya senang membantu Anda dengan pertanyaan atau kebutuhan Anda. Apa yang bisa saya bantu hari ini?",
