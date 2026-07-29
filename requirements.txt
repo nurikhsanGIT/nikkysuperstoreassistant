@@ -2,9 +2,11 @@ streamlit
 pandas
 numpy
 plotly
+pypdf
 langchain
 langchain-core
 langchain-community
+langchain-text-splitters
 langchain-ollama
 langchain-groq
 langchain-huggingface
@@ -19,6 +21,7 @@ requests
 python-dateutil
 rouge-score
 nltk
+sqlalchemy
 torch
 transformers
 datasets
