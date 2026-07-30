@@ -39,6 +39,13 @@ class InventoryAgent(BaseAgent):
             df = SuperstoreDataLoader.get_top_products(top_n=10)
         elif any(k in q for k in ["slow", "lambat", "tidak laku"]):
             df = SuperstoreDataLoader.get_slow_products(bottom_n=10)
+        elif any(k in q for k in ["stok di bawah", "stok <", "stok sedikit", "restock", "sedikit", "low stock", "kurang dari", "bawah"]):
+            import re
+            threshold = 10
+            match = re.search(r'(?:bawah|kurang dari|<)\s*(\d+)', q)
+            if match:
+                threshold = int(match.group(1))
+            df = SuperstoreDataLoader.get_low_stock_products(max_qty=threshold, top_n=top_n)
         else:
             df = SuperstoreDataLoader.get_products(
                 keyword=keyword_filter,
@@ -46,6 +53,7 @@ class InventoryAgent(BaseAgent):
                 sub_category=sub_cat_filter,
                 top_n=top_n
             )
+
 
         if df.empty:
             return {

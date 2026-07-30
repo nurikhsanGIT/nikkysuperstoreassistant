@@ -20,15 +20,25 @@ class PurchasingAgent(BaseAgent):
         from utils.data_loader import SuperstoreDataLoader
         import json
         
-        # Berikan data produk terlaris sebagai acuan restock
-        top_products = SuperstoreDataLoader.get_top_products(top_n=5)
-        context_data = top_products.to_dict(orient="records") if not top_products.empty else []
+        user_query = state.get("user_query", task_desc).lower()
+        import re
+        if any(k in user_query for k in ["bawah", "kurang dari", "sedikit", "low stock", "stok"]):
+            threshold = 10
+            match = re.search(r'(?:bawah|kurang dari|<)\s*(\d+)', user_query)
+            if match:
+                threshold = int(match.group(1))
+            products_df = SuperstoreDataLoader.get_low_stock_products(max_qty=threshold, top_n=10)
+        else:
+            products_df = SuperstoreDataLoader.get_top_products(top_n=5)
+
+        context_data = products_df.to_dict(orient="records") if not products_df.empty else []
         llm_input = json.dumps(context_data, ensure_ascii=False)
 
         prompt = f"""
 Anda adalah AI Purchasing Agent dari Josjis Super Store.
-Berikut adalah daftar produk dengan penjualan tertinggi saat ini yang relevan untuk restock:
+Berikut adalah daftar produk yang relevan untuk restock / analisis stok:
 {llm_input}
+
 
 Tugas Anda adalah merencanakan pembelian stok kembali ke supplier. 
 PERATURAN KETAT:

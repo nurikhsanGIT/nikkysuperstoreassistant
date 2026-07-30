@@ -134,6 +134,23 @@ class SuperstoreDataLoader:
         return result
 
     @classmethod
+    def get_low_stock_products(cls, max_qty: int = 10, top_n: int = 20) -> pd.DataFrame:
+        """Daftar produk dengan total quantity (stok) di bawah max_qty."""
+        df = cls.get_superstore()
+        if df.empty:
+            return df
+        result = (
+            df.groupby(["Product_Name", "Category", "Sub_Category"], as_index=False)
+            .agg(Total_Quantity=("Quantity", "sum"), Total_Sales=("Sales", "sum"),
+                 Total_Profit=("Profit", "sum"))
+        )
+        result = result[result["Total_Quantity"] < max_qty].sort_values(["Total_Sales", "Total_Quantity"], ascending=[False, True]).head(top_n)
+        result["Total_Sales"] = result["Total_Sales"].round(2)
+        result["Total_Profit"] = result["Total_Profit"].round(2)
+        return result
+
+
+    @classmethod
     def get_finance_summary(cls) -> dict:
         """Ringkasan keuangan dari seluruh dataset."""
         df = cls.get_superstore()
